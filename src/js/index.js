@@ -63,7 +63,6 @@ elements.searchResPages.addEventListener("click", e => {
 /* *
  * RECIPE CONTROLLER *
  * */
-
 const controlRecipe = async () => {
   // get ID from url
   const id = window.location.hash.replace("#", "");
@@ -133,7 +132,6 @@ elements.shoppingList.addEventListener("click", e => {
 /* *
  * LIKES CONTROLLER *
  * */
-
 const controlLike = () => {
   const currentID = state.recipe.id;
 
