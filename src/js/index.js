@@ -16,7 +16,7 @@ import Like from "./models/Likes";
  * - Liked recipes
  */
 const state = {};
-
+window.state = state;
 /* *
  * SEARCH CONTROLLER *
  * */
@@ -114,10 +114,25 @@ const controlList = () => {
   });
 };
 
+// Handle delete and update list item events
+elements.shoppingList.addEventListener("click", e => {
+  const id = e.target.closest(".shopping__item").dataset.itemid;
+
+  if (e.target.matches(".shopping__delete, .shopping__delete *")) {
+    // delete item from state
+    state.list.deleteItem(id);
+    // delete item from UI
+    listView.deleteItem(id);
+  } else if (e.target.matches(".shopping__count-value")) {
+    // update
+    const val = parseFloat(e.target.value, 10);
+    state.list.updateCount(id, val);
+  }
+});
+
 /* *
  * LIKES CONTROLLER *
  * */
-if (!state.likes) state.likes = new Likes();
 
 const controlLike = () => {
   const currentID = state.recipe.id;
@@ -148,20 +163,18 @@ const controlLike = () => {
   likesView.toggleLikeMenu(state.likes.getNumLikes());
 };
 
-// Handle delete and update list item events
-elements.shoppingList.addEventListener("click", e => {
-  const id = e.target.closest(".shopping__item").dataset.itemid;
+// Restore liked recipes on page load
+window.addEventListener("load", () => {
+  if (!state.likes) state.likes = new Likes();
 
-  if (e.target.matches(".shopping__delete, .shopping__delete *")) {
-    // delete item from state
-    state.list.deleteItem(id);
-    // delete item from UI
-    listView.deleteItem(id);
-  } else if (e.target.matches(".shopping__count-value")) {
-    // update
-    const val = parseFloat(e.target.value, 10);
-    state.list.updateCount(id, val);
-  }
+  // Restore likes
+  state.likes.readStorage();
+
+  //  Toggle like menu btn
+  likesView.toggleLikeMenu(state.likes.getNumLikes());
+
+  // Render the existing likes
+  state.likes.likes.forEach(like => likesView.renderLike(like));
 });
 
 // Handling recipe button clicks
