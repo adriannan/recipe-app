@@ -18,11 +18,11 @@ export const highlightSelected = id => {
   });
 
   document
-    .querySelector(`a[href="#${id}"]`)
+    .querySelector(`.results__link[href="#${id}"]`)
     .classList.add("results__link--active");
 };
 
-const limitRecipeTit = (title, limit = 18) => {
+export const limitRecipeTit = (title, limit = 18) => {
   const newTitle = [];
 
   if (title.length > limit) {
